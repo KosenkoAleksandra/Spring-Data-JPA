@@ -1,26 +1,29 @@
 package ru.skypro.lessons.springboot.springboot.service;
 
+import jakarta.validation.constraints.Min;
 import lombok.Data;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
-import ru.skypro.lessons.springboot.springboot.entity.Position;
 import ru.skypro.lessons.springboot.springboot.repository.EmployeeRepository;
 
 
-import java.util.ArrayList;
+import java.awt.print.Pageable;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.min;
-import static java.util.Objects.isNull;
 
 @Data
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
+    private final Page<Pageable> paging;
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {
@@ -59,7 +62,17 @@ public class EmployeeServiceImpl implements EmployeeService{
         return EmployeeDTO.fromEmployee(employeeRepository.employeeWithHighestSalary());
     }
     @Override
-    public List<EmployeeDTO> allEmployeesPosition() {
-        return employeeRepository.allEmployeesPosition();
+    public List<EmployeeDTO> allEmployeesByPosition(String name) {
+        return employeeRepository.returnAllByPositionId(name).stream()
+                .map(EmployeeDTO::fromEmployee)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<Employee> getEmployeeWithPaging(int pageIndex, int unitPerPage) {
+        Pageable employeeOfConcretePage = PageRequest.of(pageIndex, unitPerPage);
+        Page<Employee> page = paging.findAll(employeeOfConcretePage);
+
+        return page.stream()
+                .toList();
     }
 }

@@ -9,22 +9,22 @@ import ru.skypro.lessons.springboot.springboot.entity.Employee;
 
 import java.util.List;
 
-public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
+public interface EmployeeRepository extends CrudRepository<Employee, Integer>  {
     @Query("SELECT e FROM Employee e")
     List<Employee> findAllEmployees();
     @Query(value = "SELECT * FROM employee WHERE name= :name",
             nativeQuery = true)
     List<EmployeeDTO> getEmployeesByName(@Param("name") String name);
-    @Query("SELECT new ru.skypro.lessons.springboot.weblibrary.dto." +
+    @Query("SELECT new ru.skypro.lessons.springboot.springboot.dto." +
             "EmployeeFullInfo(e.name , e.salary , p.name) " +
             "FROM Employee e join fetch Position p " +
             "WHERE e.position = p")
     List<EmployeeFullInfo> findAllEmployeeFullInfo();
-    @Query("SELECT max(salary) from employee")
+    @Query("SELECT e FROM Employee e WHERE e.salary > :salary")
     Employee employeeWithHighestSalary();
-    @Query(value = "SELECT * FROM position WHERE name= :name",
-            nativeQuery = true)
-    List<EmployeeDTO> allEmployeesPosition();
+    @Query("SELECT e, p FROM Employee e JOIN FETCH Position p" +
+        " ON e.position = p WHERE e.position.name = :name")
+    List<Employee> returnAllByPositionId(@Param("name") String name);
 
 
 

@@ -1,9 +1,6 @@
 package ru.skypro.lessons.springboot.springboot.controller;
 
-import jakarta.validation.constraints.Min;
 import lombok.Data;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeFullInfo;
@@ -51,6 +48,10 @@ public class EmployeeController {
     @GetMapping
     public List<EmployeeDTO> allEmployeesByPosition (@RequestParam("position") String name) {
         return employeeService.allEmployeesByPosition(name);
+    }
+    @GetMapping("/page")
+    public List<Employee> getEmployeeWithPaging(@RequestParam("page")int pageIndex, int unitPerPage) {
+        return employeeService.getEmployeeWithPaging(pageIndex, unitPerPage);
     }
 
 }

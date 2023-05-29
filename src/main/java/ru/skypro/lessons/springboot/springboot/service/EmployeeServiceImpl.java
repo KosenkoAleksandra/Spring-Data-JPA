@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
-    Pageable employee = PageRequest.of(0, 10);
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {

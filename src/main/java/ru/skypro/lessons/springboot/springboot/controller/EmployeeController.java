@@ -5,11 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
-import ru.skypro.lessons.springboot.springboot.entity.Position;
 import ru.skypro.lessons.springboot.springboot.service.EmployeeService;
 
 import java.util.List;
-import java.util.Map;
+
 
 @Data
 @RestController
@@ -47,7 +46,12 @@ public class EmployeeController {
         return employeeService.employeeWithHighestSalary();
     }
     @GetMapping
-    public List<EmployeeDTO> allEmployeesPosition (@RequestParam("position") Position position) {
-        return null;
+    public List<EmployeeDTO> allEmployeesByPosition (@RequestParam("position") String name) {
+        return employeeService.allEmployeesByPosition(name);
     }
+    @GetMapping("/page")
+    public List<Employee> getEmployeeWithPaging(@RequestParam("page")int pageIndex, int unitPerPage) {
+        return employeeService.getEmployeeWithPaging(pageIndex, unitPerPage);
+    }
+
 }

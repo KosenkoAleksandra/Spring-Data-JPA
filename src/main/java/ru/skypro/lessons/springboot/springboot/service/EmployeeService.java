@@ -15,6 +15,7 @@ public interface EmployeeService {
     void deleteEmployeeById(int id);
     List<EmployeeDTO> getEmployeesByName(String name);
     EmployeeDTO employeeWithHighestSalary();
-    List<EmployeeDTO> allEmployeesPosition();
+    List<EmployeeDTO> allEmployeesByPosition(String name);
 
+    List<Employee> getEmployeeWithPaging(int pageIndex, int unitPerPage);
 }

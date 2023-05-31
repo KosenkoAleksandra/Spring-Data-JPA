@@ -3,6 +3,8 @@ package ru.skypro.lessons.springboot.springboot.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @ToString
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class Employee {
     private Integer id;
     private String name;
     private Integer salary;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "position_id")
     private Position position;
 

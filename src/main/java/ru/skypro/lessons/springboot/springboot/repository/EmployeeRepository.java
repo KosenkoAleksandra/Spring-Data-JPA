@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeFullInfo;
+import ru.skypro.lessons.springboot.springboot.dto.ReportDTO;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
 
 import java.util.List;
@@ -28,5 +29,7 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer>, P
     @Query("SELECT e, p FROM Employee e JOIN FETCH Position p" +
         " ON e.position = p WHERE e.position.name = :name")
     List<Employee> returnAllByPositionId(@Param("name") String name);
+    @Query("SELECT new ru.skypro.lessons.springboot.springboot.dto.ReportDTO(e.position.name, count(e.id), max(e.salary), min(e.salary), avg(e.salary)) FROM Employee e GROUP BY e.position.name")
+    List<ReportDTO> buildReports();
 
 }

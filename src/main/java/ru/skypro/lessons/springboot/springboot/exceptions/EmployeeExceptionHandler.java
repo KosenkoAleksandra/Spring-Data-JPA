@@ -22,4 +22,16 @@ public class EmployeeExceptionHandler {
     public ResponseEntity<?> handleSQLException(SQLException sqlException) {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(ReportNotFoundException.class)
+    public ResponseEntity<?> notFound() {
+        return ResponseEntity.notFound().build();
+    }
+    @ExceptionHandler(IllegalJsonFileException.class)
+    public ResponseEntity<?> badRequest() {
+        return ResponseEntity.badRequest().build();
+    }
+    @ExceptionHandler(InternalServerError.class)
+    public ResponseEntity<?> internalServerError() {
+        return ResponseEntity.internalServerError().build();
+    }
 }

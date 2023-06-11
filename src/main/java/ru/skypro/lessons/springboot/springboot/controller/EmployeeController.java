@@ -1,7 +1,9 @@
 package ru.skypro.lessons.springboot.springboot.controller;
 
 import lombok.Data;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
@@ -52,6 +54,10 @@ public class EmployeeController {
     @GetMapping("/page")
     public List<Employee> getEmployeeWithPaging(@RequestParam("page")int pageIndex, int unitPerPage) {
         return employeeService.getEmployeeWithPaging(pageIndex, unitPerPage);
+    }
+    @PostMapping(value = "/upload" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void uploadFile(@RequestPart("employees") MultipartFile employees) {
+        employeeService.upload(employees);
     }
 
 }

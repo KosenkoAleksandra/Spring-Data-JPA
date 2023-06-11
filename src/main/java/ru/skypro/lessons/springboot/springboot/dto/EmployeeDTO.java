@@ -4,11 +4,13 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors (chain = true)
-public class EmployeeDTO {
+public class EmployeeDTO implements Serializable {
     private Integer id;
     private String name;
     private Integer salary;

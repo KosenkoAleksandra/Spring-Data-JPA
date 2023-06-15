@@ -1,5 +1,6 @@
 package ru.skypro.lessons.springboot.springboot.controller;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -8,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.lessons.springboot.springboot.service.EmployeeService;
-@Data
+@AllArgsConstructor
 @RestController
 @RequestMapping("/report")
 public class ReportController {

@@ -23,25 +23,15 @@ public class EmployeeController {
     public List<EmployeeDTO> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
-    @PostMapping
-    public EmployeeDTO addEmployee(@RequestBody Employee employee) {
-        return EmployeeDTO.fromEmployee(employeeService.addEmployee(employee).toEmployee());
-    }
+
     @GetMapping("/{id}")
     public EmployeeDTO getEmployeeByID(@PathVariable Integer id) {
         return employeeService.getEmployeeById(id);
     }
-    @DeleteMapping("/{id}")
-    public void deleteEmployeeById(@PathVariable Integer id) {
-        employeeService.deleteEmployeeById(id);
-    }
+
     @GetMapping("/{name}")
     public List<EmployeeDTO> getEmployeesByName(@PathVariable String name) {
         return employeeService.getEmployeesByName(name);
-    }
-    @GetMapping("/{id}/fullInfo")
-    public List<EmployeeFullInfo> getAllInfo(@PathVariable Integer id) {
-        return employeeService.getAllInfo();
     }
     @GetMapping("/withHighestSalary")
     public EmployeeDTO employeeWithHighestSalary(@PathVariable Integer id) {
@@ -55,9 +45,6 @@ public class EmployeeController {
     public List<Employee> getEmployeeWithPaging(@RequestParam("page")int pageIndex, int unitPerPage) {
         return employeeService.getEmployeeWithPaging(pageIndex, unitPerPage);
     }
-    @PostMapping(value = "/upload" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadFile(@RequestPart("employees") MultipartFile employees) {
-        employeeService.upload(employees);
-    }
+
 
 }

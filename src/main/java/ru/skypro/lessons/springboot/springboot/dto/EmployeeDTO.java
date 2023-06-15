@@ -10,7 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors (chain = true)
-public class EmployeeDTO implements Serializable {
+public class EmployeeDTO{
     private Integer id;
     private String name;
     private Integer salary;

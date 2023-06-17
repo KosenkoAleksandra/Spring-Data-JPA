@@ -45,7 +45,12 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeDTO addEmployee(Employee employee) {
         return EmployeeDTO.fromEmployee(employeeRepository.save(employee));
-
+    }
+    @Override
+    public void addBatchEmployees(List<EmployeeDTO> employees) {
+        employees.stream()
+                .map(EmployeeDTO::toEmployee)
+                .forEach(employeeRepository::save);
     }
     @Override
     public EmployeeDTO getEmployeeById(int id) {
@@ -97,7 +102,7 @@ public class EmployeeServiceImpl implements EmployeeService{
                     new TypeReference<>() {
                     }
             );
-            getAllEmployees();
+            addBatchEmployees(employeeDTOS);
         } catch (IOException e) {
             throw new IllegalJsonFileException();
         }

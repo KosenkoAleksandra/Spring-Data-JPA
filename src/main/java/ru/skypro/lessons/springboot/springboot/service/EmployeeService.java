@@ -22,4 +22,5 @@ public interface EmployeeService {
     int createReport();
 
     Resource downloadReport(int id);
+    void addBatchEmployees(List<EmployeeDTO> employees);
 }

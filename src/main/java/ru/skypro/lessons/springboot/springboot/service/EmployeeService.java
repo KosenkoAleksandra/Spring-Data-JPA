@@ -20,7 +20,6 @@ public interface EmployeeService {
     List<Employee> getEmployeeWithPaging(int pageIndex, int unitPerPage);
     void upload(MultipartFile employees);
     int createReport();
-
     Resource downloadReport(int id);
     void addBatchEmployees(List<EmployeeDTO> employees);
 }

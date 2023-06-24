@@ -14,10 +14,11 @@ public class AuthUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 16)
     private String username;
-
+    @Column(nullable = false)
     private String password;
+    @Column(name = "is_enabled", nullable = false)
     private boolean isEnabled;
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

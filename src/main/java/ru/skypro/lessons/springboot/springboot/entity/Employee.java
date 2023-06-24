@@ -17,6 +17,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false, length = 16)
     private String name;
     private Integer salary;
     @ManyToOne(cascade = CascadeType.ALL)

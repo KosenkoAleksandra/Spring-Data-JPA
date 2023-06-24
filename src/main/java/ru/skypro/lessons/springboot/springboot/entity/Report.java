@@ -21,10 +21,10 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Lob
-    @Column(columnDefinition = "oid")
+    @Column(columnDefinition = "oid", nullable = false)
     private String report;
     @CreationTimestamp()
-    @Column(updatable = false)
+    @Column(updatable = false, name = "created_at", nullable = false)
     private Instant createdAt;
 
 }

@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+              http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+
+    <changeSet id="create-employee-table" author="Aleksandra Kosenko">
+
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="employee"/>
+                </not>
+                <tableExists tableName="position"/>
+            </and>
+        </preConditions>
+
+        <createTable tableName="employee">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salary" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position_id" type="INT"/>
+        </createTable>
+
+
+
+        <addForeignKeyConstraint baseTableName="employee" baseColumnNames="position_id"
+                                 constraintName="FK_EMPLOYEE_POSITION_ID" referencedTableName="position"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+</databaseChangeLog>

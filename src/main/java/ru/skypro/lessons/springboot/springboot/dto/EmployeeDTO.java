@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
 
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor

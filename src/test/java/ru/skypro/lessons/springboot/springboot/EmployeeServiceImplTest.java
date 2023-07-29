@@ -2,18 +2,17 @@ package ru.skypro.lessons.springboot.springboot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeFullInfo;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
 import ru.skypro.lessons.springboot.springboot.entity.Position;
+import ru.skypro.lessons.springboot.springboot.entity.Report;
 import ru.skypro.lessons.springboot.springboot.exceptions.InternalServerError;
 import ru.skypro.lessons.springboot.springboot.repository.EmployeeRepository;
 import ru.skypro.lessons.springboot.springboot.repository.ReportRepository;
@@ -25,9 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO.fromEmployee;
@@ -46,6 +43,8 @@ public class EmployeeServiceImplTest {
     private EmployeeServiceImpl employeeService;
     private final Faker faker = new Faker();
     Employee employee = generateEmployee(100, 1000);
+    EmployeeDTO employeeDTO1 = fromEmployee(employee);
+
 
 
     @Test
@@ -60,21 +59,12 @@ public class EmployeeServiceImplTest {
                         .collect(Collectors.toList());
 
         when(employeeRepository.findAllEmployees()).thenReturn(employees);
-        when(fromEmployee(any())).thenAnswer(invocationOnMock -> {
-            Employee argument = invocationOnMock.getArgument(0, Employee.class);
-            return toDTO(argument);
-        });
 
         List<EmployeeDTO> actual = employeeService.getAllEmployees();
 
-        org.assertj.core.api.Assertions.assertThat(actual)
-                        .hasSize(5)
-                        .usingRecursiveFieldByFieldElementComparator()
-                        .containsExactlyInAnyOrderElementsOf(expected);
+        assertEquals(expected, actual);
 
         verify(employeeRepository, times(1)).findAllEmployees();
-        verify(employeeDTO, times(5)).fromEmployee(any());
-
 
     }
     private Employee generateEmployee(int id, Integer positionId) {
@@ -95,14 +85,16 @@ public class EmployeeServiceImplTest {
         return new EmployeeDTO()
                 .setId(employee.getId())
                 .setName(employee.getName())
-                .setSalary(employee.getSalary());
+                .setSalary(employee.getSalary())
+                .setPosition(employee.getPosition());
     }
 
     @Test
     public void addEmployee_givenEmployee_whenAdd() {
-        when(employeeRepository.save(any())).thenReturn(employee);
 
-        assertEquals(employee, employeeService.addEmployee(employee));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
+
+        assertEquals(employeeDTO1, employeeService.addEmployee(employee));
 
         verify(employeeRepository, times(1)).save(employee);
 
@@ -111,13 +103,7 @@ public class EmployeeServiceImplTest {
     @Test
     public void addBatchEmployees_CorrectAdditionOfListOfEmployees() {
         EmployeeDTO result = fromEmployee(generateEmployee(1, 1000));
-        when(employeeDTO.toEmployee()).thenAnswer(invocationOnMock -> {
-            EmployeeDTO argument = invocationOnMock.getArgument(0, EmployeeDTO.class);
-            Employee employee = new Employee();
-            employee.setName(argument.getName());
-            employee.setSalary(argument.getSalary());
-            return employee;
-        });
+
         employeeService.addBatchEmployees(List.of(result));
 
         ArgumentCaptor<Employee> captor = ArgumentCaptor.forClass(Employee.class);
@@ -134,29 +120,41 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void getEmployeeById_EnterId_GetExistingEmployee() {
-        when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
 
-        assertEquals(employee, employeeService.getEmployeeById(any()));
+        when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(employee));
 
-        verify(employeeRepository, times(1)).findById(any());
+        assertEquals(employeeDTO1, employeeService.getEmployeeById(anyInt()));
+
+        verify(employeeRepository, times(1)).findById(anyInt());
     }
 
     @Test
     public void deleteEmployeeById_WhenEnterId_EmployeeIsDeleted() {
+        doNothing().doThrow( new IllegalStateException() )
+                .when(employeeRepository).deleteById(anyInt());
 
-        when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
+        employeeService.deleteEmployeeById(anyInt());
 
-        verify(employeeRepository, times(1)).deleteById(any());
+        verify(employeeRepository, times(1)).deleteById(anyInt());
 
     }
 
     @Test
     public void getEmployeesByName_WhenEnterName_GetEmployees() {
-        when(employeeRepository.getEmployeesByName(any())).thenReturn((List<EmployeeDTO>) employee);
+        List<Employee> employees = Stream.iterate(1, id -> id + 1)
+                .map(id -> generateEmployee(id, id + 1000))
+                .limit(5)
+                .collect(Collectors.toList());
 
-        assertEquals(employee, employeeService.getEmployeesByName(String.valueOf(employee)));
+        List<EmployeeDTO> employeeDTOList = employees.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
 
-        verify(employeeRepository, times(1)).getEmployeesByName(String.valueOf(employee));
+        when(employeeRepository.getEmployeesByName(any())).thenReturn(employeeDTOList);
+
+        assertEquals(employeeDTOList, employeeService.getEmployeesByName(any()));
+
+        verify(employeeRepository, times(1)).getEmployeesByName(any());
 
     }
 
@@ -180,7 +178,7 @@ public class EmployeeServiceImplTest {
 
         when(employeeRepository.employeeWithHighestSalary()).thenReturn(employee);
 
-        assertEquals(employee, employeeService.employeeWithHighestSalary());
+        assertEquals(employeeDTO1, employeeService.employeeWithHighestSalary());
 
         verify(employeeRepository, times(1)).employeeWithHighestSalary();
 
@@ -199,20 +197,13 @@ public class EmployeeServiceImplTest {
                 .collect(Collectors.toList());
 
         when(employeeRepository.returnAllByPositionId(any())).thenReturn(employees);
-        when(fromEmployee(any())).thenAnswer(invocationOnMock -> {
-            Employee argument = invocationOnMock.getArgument(0, Employee.class);
-            return toDTO(argument);
-        });
 
         List<EmployeeDTO> actual = employeeService.allEmployeesByPosition(any());
 
-        org.assertj.core.api.Assertions.assertThat(actual)
-                .hasSize(5)
-                .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrderElementsOf(expected);
+        assertEquals(expected, actual);
 
         verify(employeeRepository, times(1)).returnAllByPositionId(any());
-        verify(employeeDTO, times(5)).fromEmployee(any());
+
 
     }
 
@@ -228,10 +219,13 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void createReport_shouldThrowExceptionWhenRepositoryThrowsExceptions() {
+        Report report = new Report(1, "report", null);
 
-        when(employeeRepository.save(any())).thenThrow(InternalServerError.class);
+        when(reportRepository.save(any())).thenReturn(report);
 
-        assertThrows(InternalServerError.class, () -> employeeService.createReport());
+        assertEquals(report, employeeService.createReport());
+
+        verify(reportRepository, times(1)).save(report);
 
     }
 

@@ -1,0 +1,13 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+              http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+        <include file="init/table/create-position-table.xml" relativeToChangelogFile="true"/>
+        <include file="init/table/create-employee-table.xml" relativeToChangelogFile="true"/>
+        <include file="init/table/create-report-table.xml" relativeToChangelogFile="true"/>
+        <include file="init/table/create-authority-table.xml" relativeToChangelogFile="true"/>
+        <include file="init/table/create-auth_user-table.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

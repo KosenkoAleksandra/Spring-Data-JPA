@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Stepan",
+    "salary": 45000,
+    "position": "manager"
+  },
+  {
+    "name": "Svetlana",
+    "salary": 60000,
+    "position": "manager"
+  },
+  {
+    "name": "Ivan",
+    "salary": 50000,
+    "position": "manager"
+  }
+]

@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import org.json.JSONObject;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithMockUser
 @ActiveProfiles ("test")
@@ -55,6 +56,50 @@ public class EmployeeControllerTests {
     @BeforeEach
     void cleanData() {
         employeeRepository.deleteAll();
+    }
+    @Test
+    public void addEmployeeTest() throws Exception {
+        mockMvc.perform(post("/admin/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(toDTO(generateEmployee(1, 1)))))
+                .andExpect(result -> {
+                    Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+                });
+
+    }
+    @Test
+    public EmployeeDTO getEmployeeByIDTest() throws Exception {
+        EmployeeDTO employeeDTO = toDTO(generateEmployee(1,1));
+        mockMvc.perform(get("/employees/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(employeeDTO)))
+                .andExpect(result -> {
+                    Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+
+                });
+                return employeeDTO;
+    }
+
+    @Test
+    public EmployeeDTO getEmployeesByNameTest() throws Exception {
+        final String name = "Ivan";
+        EmployeeDTO employeeDTO = new EmployeeDTO()
+                .setName(name)
+                .setSalary(faker.random().nextInt(12500, 250000));
+        mockMvc.perform(get("/employees/Ivan")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(employeeDTO)))
+                .andExpect(result -> {
+                    Assertions.assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+                });
+        return employeeDTO;
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN", password = "123456", username = "username")
+    public void deleteEmployeeByIdTest() throws Exception {
+        mockMvc.perform(delete("/admin/employees/4"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -83,6 +128,7 @@ public class EmployeeControllerTests {
 
     }
 
+    @WithMockUser(roles = "USER")
     @Test
     public void employeeWithHighestSalaryTest() throws Exception {
         List<Employee> employees = Stream.iterate(1, id -> id + 1)

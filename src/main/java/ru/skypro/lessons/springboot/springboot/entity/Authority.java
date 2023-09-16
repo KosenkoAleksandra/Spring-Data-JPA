@@ -13,4 +13,8 @@ public class Authority {
 
     @Column(nullable = false, unique = true, length = 5)
     private String role;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private AuthUser authUser;
 }

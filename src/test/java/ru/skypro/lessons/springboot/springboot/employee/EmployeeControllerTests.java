@@ -36,7 +36,6 @@ import org.json.JSONObject;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithMockUser
 @ActiveProfiles ("test")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -58,6 +57,7 @@ public class EmployeeControllerTests {
         employeeRepository.deleteAll();
     }
     @Test
+    @WithMockUser
     public void addEmployeeTest() throws Exception {
         mockMvc.perform(post("/admin/employees")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +96,7 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN", password = "123456", username = "username")
+    @WithMockUser
     public void deleteEmployeeByIdTest() throws Exception {
         mockMvc.perform(delete("/admin/employees/4"))
                 .andExpect(status().isNotFound());
@@ -128,7 +128,7 @@ public class EmployeeControllerTests {
 
     }
 
-    @WithMockUser(roles = "USER")
+    @WithMockUser
     @Test
     public void employeeWithHighestSalaryTest() throws Exception {
         List<Employee> employees = Stream.iterate(1, id -> id + 1)
@@ -192,7 +192,7 @@ public class EmployeeControllerTests {
         Employee employee = new Employee();
         employee.setId(id);
         employee.setSalary(faker.random().nextInt(12500, 250000));
-        employee.setName(faker.name().fullName());
+        employee.setName(faker.name().fullName().substring(1,14));
         employee.setPosition(positionId != null ? generatePosition(positionId) : null);
         return employee;
     }

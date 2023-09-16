@@ -20,7 +20,12 @@
             <column name="role" type="VARCHAR(5)">
                 <constraints nullable="false"/>
             </column>
+            <column name="user_id" type="INT"/>
         </createTable>
+
+        <addForeignKeyConstraint baseTableName="authority" baseColumnNames="user_id"
+                                 constraintName="FK_AUTHORITY_USER_ID" referencedTableName="authUser"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -7,7 +7,8 @@
         <include file="init/table/create-position-table.xml" relativeToChangelogFile="true"/>
         <include file="init/table/create-employee-table.xml" relativeToChangelogFile="true"/>
         <include file="init/table/create-report-table.xml" relativeToChangelogFile="true"/>
-        <include file="init/table/create-authority-table.xml" relativeToChangelogFile="true"/>
         <include file="init/table/create-auth_user-table.xml" relativeToChangelogFile="true"/>
+        <include file="init/table/create-authority-table.xml" relativeToChangelogFile="true"/>
+
 
 </databaseChangeLog>

@@ -8,8 +8,8 @@ import lombok.Data;
 @Table(name = "authority")
 public class Authority {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(nullable = false, unique = true, length = 5)
     private String role;

@@ -11,8 +11,8 @@ import java.util.List;
 @Table(name = "auth_user")
 public class AuthUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(nullable = false, unique = true, length = 16)
     private String username;

@@ -24,7 +24,7 @@
         </createTable>
 
         <addForeignKeyConstraint baseTableName="authority" baseColumnNames="user_id"
-                                 constraintName="FK_AUTHORITY_USER_ID" referencedTableName="authUser"
+                                 constraintName="FK_AUTHORITY_USER_ID" referencedTableName="auth_user"
                                  referencedColumnNames="id"/>
     </changeSet>
 

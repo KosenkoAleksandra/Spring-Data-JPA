@@ -16,22 +16,28 @@ public interface EmployeeRepository extends CrudRepository<Employee, Integer>, P
 
     @Query("SELECT e FROM Employee e")
     List<Employee> findAllEmployees();
-    @Query(value = "SELECT * FROM employee WHERE name= :name",
-            nativeQuery = true)
-    List<EmployeeDTO> getEmployeesByName(@Param("name") String name);
+
+    @Query(value = "SELECT * FROM employee WHERE name= :name", nativeQuery = true)
+    List<Employee> getEmployeesByName(@Param("name") String name);
+
     @Query("SELECT new ru.skypro.lessons.springboot.springboot.dto." +
             "EmployeeFullInfo(e.name , e.salary , p.name) " +
             "FROM Employee e join fetch Position p " +
             "WHERE e.position = p")
     List<EmployeeFullInfo> findAllEmployeeFullInfo();
+
+    @Query("SELECT new ru.skypro.lessons.springboot.springboot.dto." +
+            "EmployeeFullInfo(e.name , e.salary , p.name) " +
+            "FROM Employee e join fetch Position p " +
+            "WHERE e.position = p AND e.id=?1")
+    EmployeeFullInfo findByIdFullInfo(Integer id);
+
     @Query("SELECT e FROM Employee e WHERE e.salary > :salary")
     Employee employeeWithHighestSalary();
-    @Query("SELECT e, p FROM Employee e JOIN FETCH Position p" +
-        " ON e.position = p WHERE e.position.name = :name")
-    List<Employee> returnAllByPositionId(@Param("name") String name);
-    @Query("SELECT new ru.skypro.lessons.springboot.springboot.dto.ReportDTO(e.position.name," +
-            " count(e.id), max(e.salary), min(e.salary)," +
-            " avg(e.salary)) FROM Employee e GROUP BY e.position.name")
-    List<ReportDTO> buildReports();
 
+    Employee findFirstByOrderBySalaryDesc();
+
+    @Query("SELECT e, p FROM Employee e JOIN FETCH Position p" +
+        " ON e.position = p WHERE e.position.name = :position")
+    List<Employee> getEmployeesByPosition(@Param("position") String position);
 }

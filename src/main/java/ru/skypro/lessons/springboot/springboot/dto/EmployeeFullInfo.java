@@ -1,16 +1,15 @@
 package ru.skypro.lessons.springboot.springboot.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class EmployeeFullInfo {
     private String name;
-
     private Integer salary;
-
     private String positionName;
+
     public EmployeeFullInfo(String name, Integer salary, String positionName) {
         this.name = name;
         this.salary = salary;

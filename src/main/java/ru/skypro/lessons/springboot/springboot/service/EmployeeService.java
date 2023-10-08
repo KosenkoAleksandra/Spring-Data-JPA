@@ -15,11 +15,10 @@ public interface EmployeeService {
     EmployeeDTO getEmployeeById(int id);
     void deleteEmployeeById(int id);
     List<EmployeeDTO> getEmployeesByName(String name);
+    EmployeeFullInfo getEmployeeByIdFullInfo(Integer id);
     EmployeeDTO employeeWithHighestSalary();
     List<EmployeeDTO> allEmployeesByPosition(String name);
-    List<Employee> getEmployeeWithPaging(int pageIndex, int unitPerPage);
+    List<Employee> getEmployeeWithPaging(int pageNum, int pageSize);
     void upload(MultipartFile employees);
-    int createReport();
-    Resource downloadReport(int id);
     void addBatchEmployees(List<EmployeeDTO> employees);
 }

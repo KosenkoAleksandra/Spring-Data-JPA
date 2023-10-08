@@ -3,8 +3,6 @@ package ru.skypro.lessons.springboot.springboot.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SourceType;
-
 
 import java.time.Instant;
 
@@ -20,11 +18,12 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Lob
     @Column(columnDefinition = "oid", nullable = false)
     private String report;
+
     @CreationTimestamp()
     @Column(updatable = false, name = "created_at", nullable = false)
     private Instant createdAt;
-
 }

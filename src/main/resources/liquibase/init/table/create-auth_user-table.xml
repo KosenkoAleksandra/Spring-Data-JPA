@@ -29,12 +29,8 @@
             <column name="is_enabled" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="INT"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="auth_user" baseColumnNames="user_id"
-                                 constraintName="FK_AUTH_USER_USER_ID" referencedTableName="authority"
-                                 referencedColumnNames="id"/>
 
     </changeSet>
 

@@ -1,7 +1,6 @@
 package ru.skypro.lessons.springboot.springboot.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +13,7 @@ import ru.skypro.lessons.springboot.springboot.repository.UserRepository;
 public class SecurityUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         AuthUser user = userRepository.findByUsername(username);

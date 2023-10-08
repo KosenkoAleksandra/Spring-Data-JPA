@@ -10,10 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeDTO;
 import ru.skypro.lessons.springboot.springboot.dto.EmployeeFullInfo;
+import ru.skypro.lessons.springboot.springboot.dto.PositionDTO;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
 import ru.skypro.lessons.springboot.springboot.entity.Position;
-import ru.skypro.lessons.springboot.springboot.entity.Report;
-import ru.skypro.lessons.springboot.springboot.exceptions.InternalServerError;
 import ru.skypro.lessons.springboot.springboot.repository.EmployeeRepository;
 import ru.skypro.lessons.springboot.springboot.repository.ReportRepository;
 import ru.skypro.lessons.springboot.springboot.service.EmployeeServiceImpl;
@@ -81,12 +80,13 @@ public class EmployeeServiceImplTest {
         position.setName(faker.company().profession());
         return position;
     }
+
     private EmployeeDTO toDTO(Employee employee) {
         return new EmployeeDTO()
                 .setId(employee.getId())
                 .setName(employee.getName())
                 .setSalary(employee.getSalary())
-                .setPosition(employee.getPosition());
+                .setPositionDTO(PositionDTO.fromPosition(employee.getPosition()));
     }
 
     @Test
@@ -150,7 +150,7 @@ public class EmployeeServiceImplTest {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
 
-        when(employeeRepository.getEmployeesByName(any())).thenReturn(employeeDTOList);
+        when(employeeRepository.getEmployeesByName(any())).thenReturn(employees);
 
         assertEquals(employeeDTOList, employeeService.getEmployeesByName(any()));
 
@@ -196,13 +196,13 @@ public class EmployeeServiceImplTest {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
 
-        when(employeeRepository.returnAllByPositionId(any())).thenReturn(employees);
+        when(employeeRepository.getEmployeesByPosition(any())).thenReturn(employees);
 
         List<EmployeeDTO> actual = employeeService.allEmployeesByPosition(any());
 
         assertEquals(expected, actual);
 
-        verify(employeeRepository, times(1)).returnAllByPositionId(any());
+        verify(employeeRepository, times(1)).getEmployeesByPosition(any());
 
 
     }
@@ -219,13 +219,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void createReport_shouldThrowExceptionWhenRepositoryThrowsExceptions() {
-//        Report report = new Report(1, "report", null);
-//
-//        when(reportRepository.save(any())).thenReturn(report);
-//
-//        assertEquals(report, employeeService.createReport());
-//
-//        verify(reportRepository, times(1)).save(report);
+
 
     }
 

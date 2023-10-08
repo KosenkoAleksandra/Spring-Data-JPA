@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.lessons.springboot.springboot.entity.AuthUser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +22,8 @@ public class SecurityUserPrincipal implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>(authoritiesList);
     }
-    public SecurityUserPrincipal (AuthUser authUser) {
+
+    public SecurityUserPrincipal(AuthUser authUser) {
         this.authUser = authUser;
         this.authoritiesList = authUser.getAuthorityList().stream()
                 .map(SecurityGrantedAuthorities::new)

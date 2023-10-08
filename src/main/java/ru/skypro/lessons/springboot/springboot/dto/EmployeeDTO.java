@@ -1,9 +1,10 @@
 package ru.skypro.lessons.springboot.springboot.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import ru.skypro.lessons.springboot.springboot.entity.Employee;
-import ru.skypro.lessons.springboot.springboot.entity.Position;
 
 
 @Data
@@ -14,14 +15,19 @@ public class EmployeeDTO{
     private Integer id;
     private String name;
     private Integer salary;
-    private Position position;
+    private PositionDTO positionDTO;
 
     public static EmployeeDTO fromEmployee(Employee employee) {
-        return new EmployeeDTO()
+        EmployeeDTO dto = new EmployeeDTO()
                 .setId(employee.getId())
                 .setName(employee.getName())
-                .setSalary(employee.getSalary())
-                .setPosition(employee.getPosition());
+                .setSalary(employee.getSalary());
+
+        if (employee.getPosition() != null) {
+            dto.setPositionDTO(PositionDTO.fromPosition(employee.getPosition()));
+        }
+
+        return dto;
     }
 
     public Employee toEmployee() {
@@ -29,8 +35,11 @@ public class EmployeeDTO{
         employee.setId(this.getId());
         employee.setName(this.getName());
         employee.setSalary(this.getSalary());
-        employee.setPosition(this.getPosition());
+
+        if (this.getPositionDTO() != null) {
+            employee.setPosition(this.getPositionDTO().toPosition());
+        }
+
         return employee;
     }
-
 }
